@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<!--
+  ============================================================
+  RELATÓRIO SETORIAL GEPAS — ATUALIZAÇÃO OUTUBRO
+  ============================================================
+  Fonte: Relatório_Setorial_GEPAS__Outubro.xlsx
+
+  Notas de atualização:
+  1. Aba "NIPS Evolução Mensal": cabeçalho da última coluna
+     duplicado como "Setembro", mas os valores indicam OUTUBRO.
+  2. TOTAL de Setembro no Excel está como 142, porém a soma
+     dos componentes é 129 + 14 = 143. Adotado 143.
+  3. Aba "Áreas Demandadas" (Outubro): "CODIN/COGAT" e "COGAT"
+     representam a atuação conjunta e foram consolidados.
+  4. Aba "Objeto Geral" (Outubro): EXAME (35) é nova categoria.
+  5. Aba "Planos demandados" (Outubro): IPASGO SAUDE PLENO (1).
+  6. Aba "Cidades Demandas": recorte parcial por cidade.
+  7. Inversão semântica de cores: Aumentos em Vermelho (alerta)
+     e Quedas em Verde (melhoria), adequado ao contexto de NIPs.
+  8. Logotipo do Ipasgo inserido no canto superior direito com
+     blend mode para remover o fundo branco e integrar ao header.
+  9. Inclusão do detalhamento do Objeto Financeiro nos Insights,
+     abrangendo os 12 temas de reclamação mapeados.
+  ============================================================
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Setorial GEPAS · Setembro × Outubro</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<style>
+/* ============================================================
+   PALETA "FOREST & MINT" COM LÓGICA DE ALERTA
+   ============================================================ */
+:root{
+  --petrol:      #1b4332;
+  --forest:      #2d6a4f;
+  --emerald:     #40916c;
+  --leaf:        #52b788;
+  --mint-mid:    #95d5b2;
+  --mint:        #b7e4c7;
+  --mint-soft:   #d8f3dc;
+  --mint-bg:     #f3f8f4;
+
+  --ink:         #0f2419;
+  --ink-soft:    #3a5a48;
+  --muted:       #6b8a79;
+  --line:        #e3efe7;
+  --card:        #ffffff;
+
+  /* INVERSÃO DE CORES: Aumento = Vermelho | Queda = Verde */
+  --up:          #b23a34; /* Vermelho para aumento (alerta) */
+  --up-bg:       #fbe6e4; /* Fundo vermelho claro */
+  --down:        #2d6a4f; /* Verde para queda (melhoria) */
+  --down-bg:     #d8f3dc; /* Fundo verde claro */
+  --flat:        #6b8a79;
+  --flat-bg:     #eef3f0;
+
+  --radius:      18px;
+  --radius-sm:   12px;
+  --shadow:      0 4px 20px rgba(27,67,50,.07);
+  --shadow-lg:   0 12px 36px rgba(27,67,50,.13);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--mint-bg);
+  color:var(--ink);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:56px;
+}
+
+/* ============================================================
+   HEADER COM LOGOTIPO IPASGO
+   ============================================================ */
+.header{
+  position:relative;
+  background:linear-gradient(125deg,#142f23 0%,var(--petrol) 38%,var(--forest) 78%,var(--emerald) 130%);
+  color:#fff;
+  padding:44px 40px 88px;
+  overflow:hidden;
+}
+.header::before{
+  content:'';
+  position:absolute;
+  width:520px;height:520px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(149,213,178,.22),transparent 68%);
+  top:-260px;right:-140px;
+}
+.header::after{
+  content:'';
+  position:absolute;
+  width:340px;height:340px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(216,243,220,.14),transparent 70%);
+  bottom:-200px;left:-90px;
+}
+
+/* ESTILO DO LOGOTIPO */
+.ipasgo-logo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  max-height: 110px;
+  width: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  border-bottom-left-radius: 24px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.header-inner{
+  position:relative;
+  z-index:2;
+  max-width:1440px;
+  margin:0 auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:28px;
+  align-items:flex-start;
+  justify-content:space-between;
+  padding-right: 120px;
+}
+.header-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(216,243,220,.15);
+  border:1px solid rgba(216,243,220,.28);
+  color:var(--mint-soft);
+  font-size:11.5px;
+  font-weight:600;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  padding:7px 15px;
+  border-radius:100px;
+  margin-bottom:18px;
+  backdrop-filter:blur(4px);
+}
+.header-eyebrow svg{width:14px;height:14px}
+.header h1{
+  font-size:clamp(26px,3.4vw,40px);
+  font-weight:800;
+  letter-spacing:-.025em;
+  line-height:1.15;
+  margin-bottom:12px;
+}
+.header h1 span{
+  background:linear-gradient(90deg,var(--mint),var(--mint-mid));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.header p{
+  font-size:15px;
+  color:rgba(216,243,220,.82);
+  max-width:640px;
+  font-weight:400;
+}
+.header-period{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(216,243,220,.22);
+  border-radius:var(--radius);
+  padding:16px 22px;
+  backdrop-filter:blur(8px);
+  flex-shrink:0;
+}
+.header-period .hp-icon{
+  width:42px;height:42px;
+  border-radius:12px;
+  background:rgba(216,243,220,.16);
+  display:grid;place-items:center;
+  color:var(--mint);
+}
+.header-period .hp-label{
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  color:rgba(216,243,220,.68);
+  font-weight:600;
+}
+.header-period .hp-value{
+  font-size:16.5px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-.01em;
+}
+.header-period .hp-value em{
+  font-style:normal;
+  color:var(--mint-mid);
+  margin:0 4px;
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.container{
+  max-width:1440px;
+  margin:-58px auto 0;
+  padding:0 40px;
+  position:relative;
+  z-index:5;
+}
+.section{margin-bottom:44px}
+.section-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+.section-head h2{
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:-.015em;
+  color:var(--petrol);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section-head h2 svg{width:19px;height:19px;color:var(--emerald)}
+.section-head .rule{
+  flex:1;height:1px;
+  background:linear-gradient(90deg,var(--line),transparent);
+  min-width:30px;
+}
+.section-head .hint{
+  font-size:12.5px;color:var(--muted);font-weight:500;
+}
+
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.kpi{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:22px 22px 20px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(227,239,231,.9);
+  position:relative;
+  overflow:hidden;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.kpi::after{
+  content:'';position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--emerald),var(--mint-mid));
+  opacity:.85;
+}
+.kpi.accent{
+  background:linear-gradient(140deg,var(--petrol),var(--forest));
+  border-color:transparent;color:#fff;
+}
+.kpi.accent::after{background:linear-gradient(90deg,var(--mint),var(--leaf))}
+.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.kpi-icon{
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:var(--mint-soft);color:var(--forest);
+}
+.kpi-icon svg{width:19px;height:19px}
+.kpi.accent .kpi-icon{background:rgba(216,243,220,.17);color:var(--mint)}
+.kpi-chip{
+  font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:.02em;
+}
+.kpi-chip.up{background:var(--up-bg);color:var(--up)}
+.kpi-chip.down{background:var(--down-bg);color:var(--down)}
+.kpi.accent .kpi-chip{background:rgba(216,243,220,.2);color:var(--mint)}
+.kpi-label{
+  font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--muted);margin-bottom:6px;
+}
+.kpi.accent .kpi-label{color:rgba(216,243,220,.72)}
+.kpi-value{
+  font-size:34px;font-weight:800;letter-spacing:-.035em;line-height:1.1;color:var(--petrol);
+}
+.kpi.accent .kpi-value{color:#fff}
+.kpi-value small{font-size:15px;font-weight:600;color:var(--muted);margin-left:2px}
+.kpi.accent .kpi-value small{color:rgba(216,243,220,.7)}
+.kpi-sub{font-size:12.5px;color:var(--muted);margin-top:8px;font-weight:500}
+.kpi.accent .kpi-sub{color:rgba(216,243,220,.75)}
+.kpi-bar{
+  height:5px;border-radius:100px;background:var(--mint-soft);margin-top:14px;overflow:hidden;
+}
+.kpi-bar i{
+  display:block;height:100%;border-radius:100px;
+  background:linear-gradient(90deg,var(--forest),var(--leaf));
+}
+.kpi.accent .kpi-bar{background:rgba(216,243,220,.18)}
+.kpi.accent .kpi-bar i{background:linear-gradient(90deg,var(--mint),var(--leaf))}
+
+/* ============================================================
+   CHARTS
+   ============================================================ */
+.charts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:22px 24px 20px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(227,239,231,.9);
+}
+.card.span-2{grid-column:span 2}
+.card-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px;
+}
+.card-title{font-size:14.5px;font-weight:700;color:var(--petrol);letter-spacing:-.01em}
+.card-desc{font-size:12px;color:var(--muted);margin-top:3px;font-weight:500}
+.card-badge{
+  font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:5px 11px;border-radius:100px;background:var(--mint-soft);color:var(--forest);white-space:nowrap;
+}
+.chart-box{position:relative;height:290px}
+.chart-box.tall{height:340px}
+.chart-box.short{height:250px}
+
+/* ============================================================
+   DETALHAMENTO CAUSAS TOP 5
+   ============================================================ */
+.causas-detalhe{
+  margin-top:26px;padding-top:22px;border-top:1px dashed var(--mint-mid);
+}
+.causas-detalhe-head{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;
+}
+.causas-detalhe-head h3{
+  font-size:13.5px;font-weight:700;color:var(--petrol);letter-spacing:-.005em;
+  display:flex;align-items:center;gap:8px;
+}
+.causas-detalhe-head h3 svg{width:16px;height:16px;color:var(--emerald)}
+.causas-detalhe-head .sub{font-size:11.5px;color:var(--muted);font-weight:500}
+.causas-detalhe-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.causas-mes{
+  background:#fafdfb;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;
+}
+.causas-mes-title{
+  display:flex;align-items:center;justify-content:space-between;padding:11px 16px;
+  background:linear-gradient(90deg, var(--petrol) 0%, var(--forest) 100%);
+  color:#fff;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+}
+.causas-mes-title .total{
+  font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;
+  background:rgba(216,243,220,.2);color:var(--mint);
+}
+.causas-mes table{
+  width:100%;border-collapse:separate;border-spacing:0;font-size:12px;min-width:0;
+}
+.causas-mes thead th{
+  background:#eef6f0;color:var(--forest);font-size:9.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.07em;padding:8px 10px;text-align:right;white-space:nowrap;
+  border-bottom:1px solid var(--mint-soft);
+}
+.causas-mes thead th:first-child{text-align:left;border-radius:0}
+.causas-mes tbody td{
+  padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;
+  font-weight:600;color:var(--ink-soft);font-variant-numeric:tabular-nums;
+}
+.causas-mes tbody tr:last-child td{border-bottom:none}
+.causas-mes tbody td:first-child{
+  text-align:left;font-weight:600;color:var(--petrol);font-size:11px;line-height:1.3;
+}
+.causas-mes tbody tr:hover{background:#f4faf6}
+.causas-mes .col-proc{color:var(--forest);font-weight:700}
+.causas-mes .col-improc{color:var(--down);font-weight:700}
+.causas-mes .col-parc{color:#96660f;font-weight:700}
+.causas-mes .col-qtd{color:var(--petrol);font-weight:800}
+.causas-mes .vazio{color:#c2cec7;font-weight:500}
+
+@media (max-width:900px){.causas-detalhe-grid{grid-template-columns:1fr}}
+
+/* ============================================================
+   PLANOS
+   ============================================================ */
+.planos{display:flex;flex-direction:column;gap:16px;padding-top:4px}
+.plano-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;gap:10px}
+.plano-name{font-size:12.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.01em}
+.plano-qty{font-size:14px;font-weight:800;color:var(--petrol)}
+.plano-qty small{font-size:11px;font-weight:600;color:var(--muted);margin-left:4px}
+.plano-track{height:9px;border-radius:100px;background:var(--mint-bg);overflow:hidden}
+.plano-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(90deg,var(--forest),var(--leaf));
+  width:0;transition:width 1.1s cubic-bezier(.22,1,.36,1);
+}
+.plano-fill.alt{background:linear-gradient(90deg,var(--emerald),var(--mint-mid))}
+
+/* ============================================================
+   TABELAS
+   ============================================================ */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{
+  font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 17px;border-radius:100px;
+  border:1px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;
+  transition:all .2s ease;display:inline-flex;align-items:center;gap:7px;
+}
+.tab svg{width:14px;height:14px}
+.tab:hover{border-color:var(--mint-mid);background:var(--mint-bg);color:var(--forest)}
+.tab.active{
+  background:linear-gradient(135deg,var(--petrol),var(--forest));
+  border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(27,67,50,.22);
+}
+.table-wrap{overflow-x:auto;border-radius:var(--radius-sm)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px;min-width:760px}
+thead th{
+  background:var(--petrol);color:var(--mint-soft);font-size:10.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.09em;padding:13px 16px;text-align:left;white-space:nowrap;
+}
+thead th:first-child{border-radius:var(--radius-sm) 0 0 0}
+thead th:last-child{border-radius:0 var(--radius-sm) 0 0;text-align:center}
+thead th.num{text-align:right}
+tbody td{
+  padding:13px 16px;border-bottom:1px solid var(--line);color:var(--ink-soft);
+  font-weight:500;vertical-align:middle;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background .16s ease}
+tbody tr:hover{background:#f8fcfa}
+td.item{font-weight:600;color:var(--petrol);font-size:13.5px}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+td.num.m1{color:var(--muted)}
+td.num.m2{color:var(--petrol);font-weight:700}
+td.center{text-align:center}
+.delta{display:inline-flex;align-items:center;gap:4px;font-weight:700;font-variant-numeric:tabular-nums}
+.delta.up{color:var(--up)}
+.delta.down{color:var(--down)}
+.delta.flat{color:var(--flat)}
+.delta svg{width:13px;height:13px;stroke-width:2.6}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  padding:5px 11px;border-radius:100px;letter-spacing:.02em;white-space:nowrap;
+}
+.badge svg{width:12px;height:12px;stroke-width:2.6}
+.badge.up{background:var(--up-bg);color:var(--up)}
+.badge.down{background:var(--down-bg);color:var(--down)}
+.badge.flat{background:var(--flat-bg);color:var(--flat)}
+.badge.na{background:#f4f6f5;color:#9aa9a1}
+.table-foot{
+  display:flex;align-items:center;gap:9px;margin-top:16px;padding:13px 16px;
+  background:var(--mint-bg);border-radius:var(--radius-sm);font-size:12.5px;
+  color:var(--ink-soft);font-weight:500;
+}
+.table-foot svg{width:15px;height:15px;color:var(--emerald);flex-shrink:0}
+
+/* Evolução Mensal */
+.table-evolucao thead th:last-child { border-radius: 0 var(--radius-sm) 0 0; text-align: right; }
+.table-evolucao tbody tr.total-row td {
+  background-color: var(--mint-soft);color: var(--petrol);font-weight: 800;
+  border-top: 2px solid var(--mint-mid);
+}
+.table-evolucao tbody tr.total-row td.num { font-weight: 800; }
+.table-evolucao td.num { text-align: right; }
+.table-evolucao th.num { text-align: right; }
+.table-evolucao .total-col {
+  background-color: #f0f9f2;color: var(--forest);font-weight: 800;
+  border-left: 2px solid var(--mint-mid);
+}
+.table-evolucao tbody tr.total-row .total-col {
+  background-color: var(--mint-mid);color: var(--petrol);font-weight: 800;
+}
+.table-evolucao .conc-col {
+  background: linear-gradient(90deg, #e8f5ec 0%, #f0f9f2 100%);
+  color: var(--forest);font-weight: 800;border-left: 2px solid var(--mint-mid);
+  font-variant-numeric: tabular-nums;
+}
+.table-evolucao tbody tr.total-row .conc-col {
+  background: linear-gradient(90deg, var(--mint) 0%, var(--mint-mid) 100%);
+  color: var(--petrol);font-weight: 800;
+}
+.table-evolucao tbody tr.row-assistencial {
+  background: linear-gradient(90deg, #f6fcf7 0%, #eef9f1 100%);position: relative;
+}
+.table-evolucao tbody tr.row-assistencial td.item {
+  color: var(--forest);font-weight: 800;position: relative;
+}
+.table-evolucao tbody tr.row-assistencial td.item::before {
+  content: '';position: absolute;left: 0;top: 12%;bottom: 12%;width: 3px;
+  border-radius: 3px;background: linear-gradient(180deg, var(--forest), var(--leaf));
+}
+.table-evolucao tbody tr.row-assistencial td { font-weight: 700;color: var(--forest); }
+.table-evolucao tbody tr.percent-row td {
+  background-color: #f7fbf8;color: var(--emerald);font-weight: 700;font-size: 12.5px;
+  border-top: 1px dashed var(--mint-mid);font-variant-numeric: tabular-nums;
+}
+.table-evolucao tbody tr.percent-row td.item { color: var(--forest);font-weight: 800;font-style: italic; }
+.table-evolucao tbody tr.percent-row .total-col {
+  background-color: var(--mint-soft);color: var(--petrol);font-weight: 800;
+}
+.table-evolucao tbody tr.percent-row .conc-col {
+  background: linear-gradient(90deg, var(--mint) 0%, var(--mint-mid) 100%);
+  color: var(--petrol);font-weight: 800;
+}
+
+/* Callout de concentração */
+.conc-callout {
+  margin-top: 18px;display: grid;grid-template-columns: 1fr auto 1fr;gap: 0;
+  background: linear-gradient(135deg, #f6fcf7 0%, #eef9f1 100%);
+  border: 1px solid var(--mint-mid);border-radius: var(--radius);overflow: hidden;
+  box-shadow: 0 4px 16px rgba(45,106,79,.08);
+}
+.conc-side { padding: 18px 22px;display: flex;align-items: center;gap: 14px; }
+.conc-side.dominant {
+  background: linear-gradient(135deg, var(--petrol) 0%, var(--forest) 100%);color: #fff;
+}
+.conc-side.dominant .conc-icon { background: rgba(216,243,220,.2);color: var(--mint); }
+.conc-side.dominant .conc-label { color: rgba(216,243,220,.75); }
+.conc-side.dominant .conc-value { color: #fff; }
+.conc-side.dominant .conc-pct { color: var(--mint); }
+.conc-icon {
+  width: 44px;height: 44px;border-radius: 12px;display: grid;place-items: center;
+  background: var(--mint-soft);color: var(--forest);flex-shrink: 0;
+}
+.conc-icon svg { width: 22px;height: 22px; }
+.conc-body { flex: 1;min-width: 0; }
+.conc-label {
+  font-size: 10.5px;font-weight: 700;text-transform: uppercase;letter-spacing: .1em;
+  color: var(--muted);margin-bottom: 3px;
+}
+.conc-value {
+  font-size: 22px;font-weight: 800;letter-spacing: -.02em;color: var(--petrol);line-height: 1.15;
+}
+.conc-value small { font-size: 12px;font-weight: 600;color: var(--muted);margin-left: 4px; }
+.conc-side.dominant .conc-value small { color: rgba(216,243,220,.7); }
+.conc-pct { font-size: 13px;font-weight: 700;color: var(--emerald);margin-top: 2px; }
+.conc-divider {
+  display: grid;place-items: center;padding: 0 6px;color: var(--mint-mid);
+  font-size: 18px;font-weight: 800;
+}
+.conc-divider svg { width: 18px;height: 18px; }
+
+@media (max-width: 780px) {
+  .conc-callout { grid-template-columns: 1fr; }
+  .conc-divider { padding: 6px 0; }
+}
+
+/* ============================================================
+   INSIGHTS
+   ============================================================ */
+.insights-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;align-items:start}
+.insight{
+  background:var(--card);border-radius:var(--radius);
+  border:1px solid rgba(227,239,231,.9);box-shadow:var(--shadow);overflow:hidden;
+  transition:box-shadow .25s ease,border-color .25s ease;
+}
+.insight:hover{border-color:var(--mint-mid)}
+.insight.open{box-shadow:var(--shadow-lg);border-color:var(--mint)}
+.insight-head{
+  width:100%;font-family:inherit;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:13px;padding:17px 20px;text-align:left;
+}
+.insight-icon{
+  width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+  flex-shrink:0;background:var(--mint-soft);color:var(--forest);
+}
+.insight-icon svg{width:17px;height:17px}
+.insight-icon.up{background:var(--up-bg);color:var(--up)}
+.insight-icon.down{background:var(--down-bg);color:var(--down)}
+.insight-icon.neutral{background:var(--flat-bg);color:var(--flat)}
+.insight-titles{flex:1;min-width:0}
+.insight-title{
+  font-size:13.5px;font-weight:700;color:var(--petrol);letter-spacing:-.005em;
+  display:block;line-height:1.3;
+}
+.insight-sub{font-size:11.5px;color:var(--muted);font-weight:500;margin-top:2px;display:block}
+.insight-tag{
+  font-size:11.5px;font-weight:800;padding:5px 10px;border-radius:100px;
+  white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+.insight-tag.up{background:var(--up-bg);color:var(--up)}
+.insight-tag.down{background:var(--down-bg);color:var(--down)}
+.insight-tag.flat{background:var(--flat-bg);color:var(--flat)}
+.insight-head .chev{
+  width:17px;height:17px;color:var(--muted);flex-shrink:0;
+  transition:transform .3s cubic-bezier(.22,1,.36,1);
+}
+.insight.open .chev{transform:rotate(180deg);color:var(--forest)}
+.insight-body{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .33s cubic-bezier(.22,1,.36,1);
+}
+.insight.open .insight-body{grid-template-rows:1fr}
+.insight-body > div{overflow:hidden}
+.insight-content{padding:0 20px 20px 69px;font-size:13px;color:var(--ink-soft);line-height:1.68}
+.insight-content p{margin-bottom:11px}
+.insight-content p:last-child{margin-bottom:0}
+.insight-content strong{color:var(--forest);font-weight:700}
+.insight-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.pill{
+  font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 10px;border-radius:8px;background:var(--mint-bg);color:var(--forest);
+  border:1px solid var(--mint-soft);
+}
+.pill.warn{background:#fdf4e3;color:#96660f;border-color:#f7e6c4}
+
+/* NOVO: Estilo para as tags financeiras */
+.finance-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+.finance-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.finance-tag::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--up); /* Vermelho, pois são pontos de atrito */
+}
+.finance-tag.info::before { background: var(--emerald); }
+.finance-tag.warn::before { background: #96660f; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{
+  max-width:1440px;margin:0 auto;padding:28px 40px 0;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
+  gap:14px;font-size:12px;color:var(--muted);font-weight:500;
+}
+.footer strong{color:var(--forest);font-weight:700}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width:1180px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .insights-grid{grid-template-columns:1fr}
+}
+@media (max-width:900px){
+  .header{padding:34px 22px 78px}
+  .container{padding:0 22px;margin-top:-52px}
+  .footer{padding:24px 22px 0}
+  .charts-grid{grid-template-columns:1fr}
+  .card.span-2{grid-column:span 1}
+  .chart-box{height:280px}
+  .chart-box.tall{height:320px}
+  .ipasgo-logo { max-height: 80px; border-bottom-left-radius: 16px; }
+  .header-inner { padding-right: 80px; }
+}
+@media (max-width:620px){
+  .kpi-grid{grid-template-columns:1fr}
+  .header-inner{flex-direction:column; padding-right: 0;}
+  .header-period{width:100%}
+  .kpi-value{font-size:30px}
+  .insight-content{padding-left:20px}
+  .card{padding:18px 16px}
+  table{font-size:12.5px}
+  thead th,tbody td{padding:11px 12px}
+  .ipasgo-logo { max-height: 60px; opacity: 0.5; pointer-events: none; }
+}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.kpi,.card,.insight{animation:rise .5s cubic-bezier(.22,1,.36,1) both}
+.kpi:nth-child(1){animation-delay:.02s}
+.kpi:nth-child(2){animation-delay:.06s}
+.kpi:nth-child(3){animation-delay:.10s}
+.kpi:nth-child(4){animation-delay:.14s}
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <img src="https://play-lh.googleusercontent.com/nNX3uE1J5d2IA3aywlINCxcfc-y2uKxo5QcH4GFK1R4AJZj_4RhlG6OYL6_78pAY1lsAWZrblOuiENNj8WDgGw=w240-h480-rw" 
+       alt="Ipasgo Logo" 
+       class="ipasgo-logo">
+  
+  <div class="header-inner">
+    <div>
+      <div class="header-eyebrow">
+        <i data-lucide="shield-check"></i>
+        Relatório Setorial · GEPAS
+      </div>
+      <h1>Análise Comparativa de <span>Demandas NIP</span></h1>
+      <p>
+        Painel executivo de monitoramento das Notificações de Intervenção Preliminar (NIPs),
+        com comparativo de volume, causas, objetos, áreas demandadas e distribuição geográfica
+        entre os meses de Setembro e Outubro.
+      </p>
+    </div>
+    <div class="header-period">
+      <div class="hp-icon"><i data-lucide="calendar-range"></i></div>
+      <div>
+        <div class="hp-label">Período analisado</div>
+        <div class="hp-value">Setembro <em>vs.</em> Outubro</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ================= KPIs ================= -->
+  <section class="section">
+    <div class="kpi-grid">
+
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-icon"><i data-lucide="inbox"></i></div>
+          <span class="kpi-chip">Mês base</span>
+        </div>
+        <div class="kpi-label">Demanda — Setembro</div>
+        <div class="kpi-value">143 <small>NIPs</small></div>
+        <div class="kpi-sub">129 assistenciais · 14 não assistenciais</div>
+        <div class="kpi-bar"><i style="width:94.1%"></i></div>
+      </div>
+
+      <div class="kpi accent">
+        <div class="kpi-top">
+          <div class="kpi-icon"><i data-lucide="inbox-check"></i></div>
+          <span class="kpi-chip">Mês atual</span>
+        </div>
+        <div class="kpi-label">Demanda — Outubro</div>
+        <div class="kpi-value">152 <small>NIPs</small></div>
+        <div class="kpi-sub">136 assistenciais · 16 não assistenciais</div>
+        <div class="kpi-bar"><i style="width:100%"></i></div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-icon"><i data-lucide="trending-up"></i></div>
+          <span class="kpi-chip up">+9 NIPs</span>
+        </div>
+        <div class="kpi-label">Variação global</div>
+        <div class="kpi-value">+6,3<small>%</small></div>
+        <div class="kpi-sub">143 → 152 demandas no comparativo mensal</div>
+        <div class="kpi-bar"><i style="width:100%"></i></div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-icon"><i data-lucide="flame"></i></div>
+          <span class="kpi-chip up">+280,0%</span>
+        </div>
+        <div class="kpi-label">Maior crescimento</div>
+        <div class="kpi-value">Prazo de Autorização</div>
+        <div class="kpi-sub">5 → 19 demandas · maior salto percentual do período</div>
+        <div class="kpi-bar"><i style="width:100%"></i></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CHARTS ================= -->
+  <section class="section">
+    <div class="section-head">
+      <h2><i data-lucide="bar-chart-3"></i> Visualização Gráfica</h2>
+      <span class="rule"></span>
+      <span class="hint">Comparativo Setembro × Outubro · valores e % visíveis nos gráficos</span>
+    </div>
+
+    <div class="charts-grid">
+
+      <!-- ===== CARD CAUSAS TOP 5 ===== -->
+      <div class="card span-2">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Causas Top 5 — Comparativo Mensal</div>
+            <div class="card-desc">Volume de NIPs por causa raiz, lado a lado entre os dois meses</div>
+          </div>
+          <span class="card-badge">Setembro × Outubro</span>
+        </div>
+        <div class="chart-box tall"><canvas id="chartCausas"></canvas></div>
+
+        <!-- DETALHAMENTO POR DECISÃO -->
+        <div class="causas-detalhe">
+          <div class="causas-detalhe-head">
+            <h3><i data-lucide="gavel"></i> Detalhamento por Tipo de Decisão</h3>
+            <span class="sub">Procedente · Improcedente · Parcialmente</span>
+          </div>
+
+          <div class="causas-detalhe-grid">
+
+            <!-- SETEMBRO -->
+            <div class="causas-mes">
+              <div class="causas-mes-title">
+                <span>Setembro</span>
+                <span class="total">127 NIPs · Top 5</span>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Causa</th>
+                    <th>Qtd</th>
+                    <th>Proc.</th>
+                    <th>Improc.</th>
+                    <th>Parc.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Rol de Procedimentos</td>
+                    <td class="col-qtd">52</td>
+                    <td class="col-proc">17</td>
+                    <td class="col-improc">14</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Regras de Acesso</td>
+                    <td class="col-qtd">21</td>
+                    <td class="col-proc">4</td>
+                    <td class="col-improc">8</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Prazos Máximos</td>
+                    <td class="col-qtd">24</td>
+                    <td class="col-proc">10</td>
+                    <td class="col-improc">4</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Mensalidades / Cobranças</td>
+                    <td class="col-qtd">9</td>
+                    <td class="col-proc">3</td>
+                    <td class="col-improc">4</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Rede de Atendimento</td>
+                    <td class="col-qtd">21</td>
+                    <td class="col-proc">6</td>
+                    <td class="col-improc">2</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- OUTUBRO -->
+            <div class="causas-mes">
+              <div class="causas-mes-title">
+                <span>Outubro</span>
+                <span class="total">139 NIPs · Top 5</span>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Causa</th>
+                    <th>Qtd</th>
+                    <th>Proc.</th>
+                    <th>Improc.</th>
+                    <th>Parc.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Rol de Procedimentos</td>
+                    <td class="col-qtd">54</td>
+                    <td class="col-proc">17</td>
+                    <td class="col-improc">19</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Regras de Acesso</td>
+                    <td class="col-qtd">27</td>
+                    <td class="col-proc">16</td>
+                    <td class="col-improc">5</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Prazos Máximos</td>
+                    <td class="col-qtd">24</td>
+                    <td class="col-proc">10</td>
+                    <td class="col-improc">8</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Mensalidades / Cobranças</td>
+                    <td class="col-qtd">13</td>
+                    <td class="col-proc">4</td>
+                    <td class="col-improc">6</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                  <tr>
+                    <td>Rede de Atendimento</td>
+                    <td class="col-qtd">21</td>
+                    <td class="col-proc">8</td>
+                    <td class="col-improc">2</td>
+                    <td class="col-parc vazio">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Rosca Objeto -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Distribuição da Demanda Atual</div>
+            <div class="card-desc">Composição por objeto — Outubro</div>
+          </div>
+          <span class="card-badge">Outubro</span>
+        </div>
+        <div class="chart-box"><canvas id="chartObjeto"></canvas></div>
+      </div>
+
+      <!-- Linha evolução -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Evolução Mensal dos NIPs</div>
+            <div class="card-desc">Série histórica Jan–Out, assistencial vs. não assistencial</div>
+          </div>
+          <span class="card-badge">Jan – Out</span>
+        </div>
+        <div class="chart-box"><canvas id="chartEvolucao"></canvas></div>
+      </div>
+
+      <!-- Áreas -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Áreas Demandadas</div>
+            <div class="card-desc">Volume por área interna — comparativo mensal</div>
+          </div>
+          <span class="card-badge">Comparativo</span>
+        </div>
+        <div class="chart-box"><canvas id="chartAreas"></canvas></div>
+      </div>
+
+      <!-- Planos -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Planos Demandados</div>
+            <div class="card-desc">Distribuição das 152 demandas de Outubro por produto</div>
+          </div>
+          <span class="card-badge">Outubro</span>
+        </div>
+        <div class="planos" id="planosList"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= EVOLUÇÃO MENSAL CONSOLIDADA ================= -->
+  <section class="section">
+    <div class="section-head">
+      <h2><i data-lucide="calendar-days"></i> Evolução Mensal Consolidada</h2>
+      <span class="rule"></span>
+      <span class="hint">Série histórica Jan–Out, total acumulado e concentração por natureza</span>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table-evolucao">
+          <thead>
+            <tr>
+              <th>Natureza</th>
+              <th class="num">Janeiro</th>
+              <th class="num">Fevereiro</th>
+              <th class="num">Março</th>
+              <th class="num">Abril</th>
+              <th class="num">Maio</th>
+              <th class="num">Junho</th>
+              <th class="num">Julho</th>
+              <th class="num">Agosto</th>
+              <th class="num">Setembro</th>
+              <th class="num">Outubro</th>
+              <th class="num total-col">Total Ano</th>
+              <th class="num conc-col">% Concentração</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-assistencial">
+              <td class="item">ASSISTENCIAL</td>
+              <td class="num">70</td>
+              <td class="num">75</td>
+              <td class="num">89</td>
+              <td class="num">72</td>
+              <td class="num">92</td>
+              <td class="num">83</td>
+              <td class="num">116</td>
+              <td class="num">101</td>
+              <td class="num">129</td>
+              <td class="num">136</td>
+              <td class="num total-col">963</td>
+              <td class="num conc-col">87,39%</td>
+            </tr>
+            <tr>
+              <td class="item">NÃO ASSISTENCIAL</td>
+              <td class="num">18</td>
+              <td class="num">10</td>
+              <td class="num">19</td>
+              <td class="num">8</td>
+              <td class="num">10</td>
+              <td class="num">7</td>
+              <td class="num">19</td>
+              <td class="num">18</td>
+              <td class="num">14</td>
+              <td class="num">16</td>
+              <td class="num total-col">139</td>
+              <td class="num conc-col">12,61%</td>
+            </tr>
+            <tr class="total-row">
+              <td class="item">TOTAL DE NIPs</td>
+              <td class="num">88</td>
+              <td class="num">85</td>
+              <td class="num">108</td>
+              <td class="num">80</td>
+              <td class="num">102</td>
+              <td class="num">90</td>
+              <td class="num">135</td>
+              <td class="num">119</td>
+              <td class="num">143</td>
+              <td class="num">152</td>
+              <td class="num total-col">1.102</td>
+              <td class="num conc-col">100,00%</td>
+            </tr>
+            <tr class="percent-row">
+              <td class="item">% do Total Ano</td>
+              <td class="num">7,99%</td>
+              <td class="num">7,71%</td>
+              <td class="num">9,80%</td>
+              <td class="num">7,26%</td>
+              <td class="num">9,26%</td>
+              <td class="num">8,17%</td>
+              <td class="num">12,25%</td>
+              <td class="num">10,80%</td>
+              <td class="num">12,98%</td>
+              <td class="num">13,79%</td>
+              <td class="num total-col">100,00%</td>
+              <td class="num conc-col">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="conc-callout">
+        <div class="conc-side dominant">
+          <div class="conc-icon"><i data-lucide="crown"></i></div>
+          <div class="conc-body">
+            <div class="conc-label">Concentração dominante</div>
+            <div class="conc-value">Assistencial <small>· 963 NIPs</small></div>
+            <div class="conc-pct">87,39% do total anual</div>
+          </div>
+        </div>
+        <div class="conc-divider">
+          <i data-lucide="plus"></i>
+        </div>
+        <div class="conc-side">
+          <div class="conc-icon"><i data-lucide="file-warning"></i></div>
+          <div class="conc-body">
+            <div class="conc-label">Demanda complementar</div>
+            <div class="conc-value">Não Assistencial <small>· 139 NIPs</small></div>
+            <div class="conc-pct">12,61% do total anual</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TABELA COMPARATIVA DETALHADA ================= -->
+  <section class="section">
+    <div class="section-head">
+      <h2><i data-lucide="table-2"></i> Tabela Comparativa Detalhada</h2>
+      <span class="rule"></span>
+      <span class="hint">Variação absoluta e percentual por categoria</span>
+    </div>
+
+    <div class="card">
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-key="causas"><i data-lucide="stethoscope"></i> Causas Top 5</button>
+        <button class="tab" data-key="objeto"><i data-lucide="activity"></i> Objeto Geral</button>
+        <button class="tab" data-key="cidades"><i data-lucide="map-pin"></i> Cidades</button>
+        <button class="tab" data-key="areas"><i data-lucide="building-2"></i> Áreas</button>
+        <button class="tab" data-key="subcausas"><i data-lucide="layers"></i> Subcausas</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th id="th-item">Categoria / Item</th>
+              <th class="num">Setembro</th>
+              <th class="num">Outubro</th>
+              <th class="num">Var. Abs.</th>
+              <th class="num">Var. %</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="table-foot">
+        <i data-lucide="info"></i>
+        <span id="tableNote">Valores em quantidade de NIPs. Itens com “—” indicam ausência de registro no mês comparado, não sendo possível calcular a variação percentual.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INSIGHTS ================= -->
+  <section class="section">
+    <div class="section-head">
+      <h2><i data-lucide="lightbulb"></i> Análise & Insights Qualitativos</h2>
+      <span class="rule"></span>
+      <span class="hint">Clique em cada card para expandir o diagnóstico</span>
+    </div>
+
+    <div class="insights-grid" id="insights"><!-- renderizado via JS --></div>
+  </section>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <span><strong>Relatório Setorial GEPAS</strong> · Análise Comparativa de Demandas NIP</span>
+  <span>Fonte: base interna GEPAS · Período: Setembro vs. Outubro</span>
+</footer>
+
+<script>
+/* ============================================================
+   REGISTRA PLUGIN DE RÓTULOS
+   ============================================================ */
+Chart.register(ChartDataLabels);
+
+/* ============================================================
+   DADOS — SETEMBRO × OUTUBRO
+   ============================================================ */
+const MES_A = 'Setembro';
+const MES_B = 'Outubro';
+
+const DATASETS = {
+  causas: [
+    { item:'Rol de Procedimentos',                 a:52, b:54 },
+    { item:'Regras para Acesso aos Atendimentos',  a:21, b:27 },
+    { item:'Prazos Máximos para Atendimento',      a:24, b:24 },
+    { item:'Mensalidades ou Outras Cobranças',     a:9,  b:13 },
+    { item:'Rede de Atendimento',                  a:21, b:21 }
+  ],
+  objeto: [
+    { item:'Cirurgia',    a:24, b:23 },
+    { item:'Consulta',    a:29, b:24 },
+    { item:'Terapia',     a:23, b:10 },
+    { item:'Financeiro',  a:10, b:12 },
+    { item:'Medicamento', a:13, b:17 },
+    { item:'Exame',       a:0,  b:35 }
+  ],
+  cidades: [
+    { item:'Anápolis/GO',                a:6, b:15 },
+    { item:'Aparecida de Goiânia/GO',    a:7, b:3  },
+    { item:'Brasília/DF',                a:8, b:4  },
+    { item:'Goiânia/GO',                 a:91, b:85 },
+    { item:'Itaberaí/GO',                a:3, b:2  }
+  ],
+  areas: [
+    { item:'COARA', a:76, b:79 },
+    { item:'CODIN/COGAT', a:51, b:37 },
+    { item:'COARR', a:8,  b:14 },
+    { item:'CONEG', a:3,  b:8  }
+  ],
+  subcausas: [
+    { item:'Negativa de Cobertura',    a:55, b:51 },
+    { item:'Insuficiência de Rede',    a:28, b:27 },
+    { item:'Solicitação de Reembolso', a:9,  b:5  },
+    { item:'Prazo de Autorização',     a:5,  b:19 }
+  ]
+};
+
+const TABLE_TITLES = {
+  causas:    'Causa',
+  objeto:    'Objeto',
+  cidades:   'Cidade',
+  areas:     'Área',
+  subcausas: 'Subcausa'
+};
+
+const PLANOS = [
+  { nome:'IPASGO SAÚDE BÁSICO',   qtd:81 },
+  { nome:'IPASGO SAÚDE ESPECIAL', qtd:51 },
+  { nome:'IPASGO SAÚDE CERRADO',  qtd:10 },
+  { nome:'IPASGO SAÚDE FAMÍLIA',  qtd:9  },
+  { nome:'IPASGO SAÚDE PLENO',    qtd:1  }
+];
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const fmtInt = n => n.toLocaleString('pt-BR');
+const fmtPct = v => (v > 0 ? '+' : '') + v.toFixed(1).replace('.', ',') + '%';
+const fmtAbs = v => (v > 0 ? '+' : '') + fmtInt(v);
+
+function variation(a, b){
+  if (a === 0 || b === 0) return null;
+  return ((b - a) / a) * 100;
+}
+
+/* ============================================================
+   GRÁFICO 1 — BARRAS CAUSAS TOP 5
+   ============================================================ */
+const shortLabel = {
+  'Rol de Procedimentos':'ROL de Procedimentos',
+  'Regras para Acesso aos Atendimentos':'Regras de Acesso',
+  'Prazos Máximos para Atendimento':'Prazos Máximos',
+  'Mensalidades ou Outras Cobranças':'Mensalidades',
+  'Rede de Atendimento':'Rede de Atendimento'
+};
+
+new Chart(document.getElementById('chartCausas'), {
+  type:'bar',
+  data:{
+    labels: DATASETS.causas.map(c => shortLabel[c.item] || c.item),
+    datasets:[
+      {
+        label: MES_A,
+        data: DATASETS.causas.map(c => c.a),
+        backgroundColor:'#95d5b2',
+        hoverBackgroundColor:'#b7e4c7',
+        borderRadius:7,
+        borderSkipped:false,
+        maxBarThickness:44
+      },
+      {
+        label: MES_B,
+        data: DATASETS.causas.map(c => c.b),
+        backgroundColor:'#2d6a4f',
+        hoverBackgroundColor:'#1b4332',
+        borderRadius:7,
+        borderSkipped:false,
+        maxBarThickness:44
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    layout:{ padding:{ top:26, right:8 } },
+    animation:{ duration:900, easing:'easeOutQuart' },
+    plugins:{
+      legend:{
+        position:'top', align:'end',
+        labels:{
+          usePointStyle:true, pointStyle:'circle', boxWidth:8, boxHeight:8, padding:18,
+          font:{ size:12, weight:'600', family:'Inter' }, color:'#3a5a48'
+        }
+      },
+      tooltip:{
+        backgroundColor:'#1b4332',
+        titleFont:{ size:12.5, weight:'700', family:'Inter' },
+        bodyFont:{ size:12.5, family:'Inter' },
+        padding:12, cornerRadius:10, displayColors:true, usePointStyle:true,
+        callbacks:{ label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} NIPs` }
+      },
+      datalabels:{
+        anchor:'end', align:'top', offset:2, clamp:true,
+        color: ctx => ctx.datasetIndex === 0 ? '#2d6a4f' : '#1b4332',
+        font:{ size:11.5, weight:'800', family:'Inter' },
+        formatter: v => v,
+        textShadowColor:'rgba(255,255,255,.85)', textShadowBlur:4
+      }
+    },
+    scales:{
+      y:{
+        beginAtZero:true,
+        grid:{ color:'#eaf3ec', drawBorder:false },
+        ticks:{ color:'#6b8a79', font:{ size:11.5, family:'Inter' }, stepSize:10 },
+        border:{ display:false },
+        grace:'8%'
+      },
+      x:{
+        grid:{ display:false },
+        ticks:{ color:'#3a5a48', font:{ size:11.5, weight:'600', family:'Inter' } },
+        border:{ display:false }
+      }
+    }
+  }
+});
+
+/* ============================================================
+   GRÁFICO 2 — ROSCA OBJETO (OUTUBRO)
+   ============================================================ */
+new Chart(document.getElementById('chartObjeto'), {
+  type:'doughnut',
+  data:{
+    labels: DATASETS.objeto.map(o => o.item),
+    datasets:[{
+      data: DATASETS.objeto.map(o => o.b),
+      backgroundColor:['#1b4332','#2d6a4f','#40916c','#52b788','#74c69d','#95d5b2'],
+      hoverBackgroundColor:['#0f2419','#1b4332','#2d6a4f','#40916c','#52b788','#74c69d'],
+      borderColor:'#ffffff',
+      borderWidth:3,
+      hoverOffset:8
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    cutout:'58%',
+    layout:{ padding:{ top:6, bottom:6 } },
+    animation:{ animateRotate:true, duration:1000 },
+    plugins:{
+      legend:{
+        position:'bottom',
+        labels:{
+          usePointStyle:true, pointStyle:'circle', boxWidth:8, boxHeight:8, padding:12,
+          font:{ size:11.5, weight:'600', family:'Inter' }, color:'#3a5a48'
+        }
+      },
+      tooltip:{
+        backgroundColor:'#1b4332',
+        padding:12, cornerRadius:10,
+        titleFont:{ size:12.5, weight:'700', family:'Inter' },
+        bodyFont:{ size:12.5, family:'Inter' },
+        callbacks:{
+          label: ctx => {
+            const total = ctx.dataset.data.reduce((s,v) => s + v, 0);
+            const pct = ((ctx.parsed / total) * 100).toFixed(1).replace('.', ',');
+            return ` ${ctx.label}: ${ctx.parsed} NIPs (${pct}%)`;
+          }
+        }
+      },
+      datalabels:{
+        color:'#ffffff',
+        font:{ size:11, weight:'800', family:'Inter' },
+        textAlign:'center',
+        textShadowColor:'rgba(0,0,0,.45)', textShadowBlur:5,
+        formatter: (value, ctx) => {
+          const total = ctx.dataset.data.reduce((s,v) => s + v, 0);
+          const pct = ((value / total) * 100).toFixed(1).replace('.', ',');
+          return `${value}\n${pct}%`;
+        },
+        display: ctx => {
+          const total = ctx.dataset.data.reduce((s,v) => s + v, 0);
+          const share = (ctx.dataset.data[ctx.dataIndex] / total) * 100;
+          return share >= 6;
+        }
+      }
+    }
+  }
+});
+
+/* ============================================================
+   GRÁFICO 3 — EVOLUÇÃO MENSAL (LINHA) — 10 PONTOS
+   ============================================================ */
+new Chart(document.getElementById('chartEvolucao'), {
+  type:'line',
+  data:{
+    labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out'],
+    datasets:[
+      {
+        label:'Assistencial',
+        data:[70,75,89,72,92,83,116,101,129,136],
+        borderColor:'#2d6a4f',
+        backgroundColor:'rgba(45,106,79,.10)',
+        borderWidth:2.6,
+        tension:.38, fill:true,
+        pointBackgroundColor:'#2d6a4f',
+        pointBorderColor:'#ffffff', pointBorderWidth:2,
+        pointRadius:3.6, pointHoverRadius:6
+      },
+      {
+        label:'Não Assistencial',
+        data:[18,10,19,8,10,7,19,18,14,16],
+        borderColor:'#95d5b2',
+        backgroundColor:'rgba(149,213,178,.16)',
+        borderWidth:2.6,
+        tension:.38, fill:true,
+        pointBackgroundColor:'#95d5b2',
+        pointBorderColor:'#ffffff', pointBorderWidth:2,
+        pointRadius:3.6, pointHoverRadius:6
+      },
+      {
+        label:'Total',
+        data:[88,85,108,80,102,90,135,119,143,152],
+        borderColor:'#1b4332',
+        borderWidth:2.2,
+        borderDash:[6,5],
+        tension:.38, fill:false,
+        pointBackgroundColor:'#1b4332',
+        pointBorderColor:'#ffffff', pointBorderWidth:2,
+        pointRadius:3.2, pointHoverRadius:5.5
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    layout:{ padding:{ top:30, right:14, left:4 } },
+    animation:{ duration:1000, easing:'easeOutQuart' },
+    interaction:{ mode:'index', intersect:false },
+    plugins:{
+      legend:{
+        position:'top', align:'end',
+        labels:{
+          usePointStyle:true, pointStyle:'circle', boxWidth:8, boxHeight:8, padding:16,
+          font:{ size:11.5, weight:'600', family:'Inter' }, color:'#3a5a48'
+        }
+      },
+      tooltip:{
+        backgroundColor:'#1b4332',
+        padding:12, cornerRadius:10,
+        titleFont:{ size:12.5, weight:'700', family:'Inter' },
+        bodyFont:{ size:12.5, family:'Inter' },
+        callbacks:{ label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} NIPs` }
+      },
+      datalabels:{
+        align: (ctx) => {
+          if (ctx.datasetIndex === 2) return 'top';
+          if (ctx.datasetIndex === 0) return 'bottom';
+          return 'top';
+        },
+        offset: (ctx) => ctx.datasetIndex === 2 ? 6 : 5,
+        clamp:true,
+        color: (ctx) => ctx.dataset.borderColor,
+        font:{ size:9, weight:'800', family:'Inter' },
+        formatter: v => v,
+        backgroundColor:'rgba(255,255,255,.85)',
+        borderRadius:4,
+        padding:{ top:1, bottom:1, left:2, right:2 },
+        display: true
+      }
+    },
+    scales:{
+      y:{
+        beginAtZero:true,
+        grid:{ color:'#eaf3ec', drawBorder:false },
+        ticks:{ color:'#6b8a79', font:{ size:11.5, family:'Inter' } },
+        border:{ display:false },
+        grace:'12%'
+      },
+      x:{
+        grid:{ display:false },
+        ticks:{ color:'#6b8a79', font:{ size:10.5, weight:'600', family:'Inter' } },
+        border:{ display:false }
+      }
+    }
+  }
+});
+
+/* ============================================================
+   GRÁFICO 4 — ÁREAS DEMANDADAS
+   ============================================================ */
+new Chart(document.getElementById('chartAreas'), {
+  type:'bar',
+  data:{
+    labels: DATASETS.areas.map(a => a.item),
+    datasets:[
+      {
+        label: MES_A,
+        data: DATASETS.areas.map(a => a.a),
+        backgroundColor:'#b7e4c7',
+        hoverBackgroundColor:'#95d5b2',
+        borderRadius:6,
+        borderSkipped:false,
+        maxBarThickness:16
+      },
+      {
+        label: MES_B,
+        data: DATASETS.areas.map(a => a.b),
+        backgroundColor:'#2d6a4f',
+        hoverBackgroundColor:'#1b4332',
+        borderRadius:6,
+        borderSkipped:false,
+        maxBarThickness:16
+      }
+    ]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true,
+    maintainAspectRatio:false,
+    layout:{ padding:{ right:36, left:4, top:6 } },
+    animation:{ duration:900, easing:'easeOutQuart' },
+    plugins:{
+      legend:{
+        position:'top', align:'end',
+        labels:{
+          usePointStyle:true, pointStyle:'circle', boxWidth:8, boxHeight:8, padding:16,
+          font:{ size:11.5, weight:'600', family:'Inter' }, color:'#3a5a48'
+        }
+      },
+      tooltip:{
+        backgroundColor:'#1b4332',
+        padding:12, cornerRadius:10,
+        titleFont:{ size:12.5, weight:'700', family:'Inter' },
+        bodyFont:{ size:12.5, family:'Inter' },
+        callbacks:{ label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.x} NIPs` }
+      },
+      datalabels:{
+        anchor:'end', align:'right', offset:4, clamp:true,
+        color: ctx => ctx.datasetIndex === 0 ? '#40916c' : '#1b4332',
+        font:{ size:11, weight:'800', family:'Inter' },
+        formatter: v => v,
+        display: ctx => ctx.dataset.data[ctx.dataIndex] > 0
+      }
+    },
+    scales:{
+      x:{
+        beginAtZero:true,
+        grid:{ color:'#eaf3ec', drawBorder:false },
+        ticks:{ color:'#6b8a79', font:{ size:11, family:'Inter' } },
+        border:{ display:false },
+        grace:'14%'
+      },
+      y:{
+        grid:{ display:false },
+        ticks:{ color:'#3a5a48', font:{ size:11.5, weight:'700', family:'Inter' } },
+        border:{ display:false }
+      }
+    }
+  }
+});
+
+/* ============================================================
+   PLANOS — BARRAS CSS
+   ============================================================ */
+(function renderPlanos(){
+  const max = Math.max(...PLANOS.map(p => p.qtd));
+  const total = PLANOS.reduce((s,p) => s + p.qtd, 0);
+  const wrap = document.getElementById('planosList');
+
+  wrap.innerHTML = PLANOS.map((p, i) => {
+    const pct = ((p.qtd / total) * 100).toFixed(1).replace('.', ',');
+    const w   = (p.qtd / max) * 100;
+    return `
+      <div class="plano-row">
+        <div class="plano-top">
+          <span class="plano-name">${p.nome}</span>
+          <span class="plano-qty">${p.qtd}<small>${pct}%</small></span>
+        </div>
+        <div class="plano-track">
+          <div class="plano-fill ${i % 2 ? 'alt' : ''}" data-w="${w}"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    wrap.querySelectorAll('.plano-fill').forEach(el => {
+      setTimeout(() => { el.style.width = el.dataset.w + '%'; }, 120);
+    });
+  });
+})();
+
+/* ============================================================
+   TABELA COMPARATIVA
+   ============================================================ */
+const tbody   = document.getElementById('tableBody');
+const thItem  = document.getElementById('th-item');
+const tableNote = document.getElementById('tableNote');
+
+function statusBadge(a, b){
+  const v = variation(a, b);
+  if (v === null) {
+    return `<span class="badge na"><i data-lucide="minus"></i>N/D</span>`;
+  }
+  if (v > 0.05)  return `<span class="badge up"><i data-lucide="arrow-up-right"></i>Aumento</span>`;
+  if (v < -0.05) return `<span class="badge down"><i data-lucide="arrow-down-right"></i>Queda</span>`;
+  return `<span class="badge flat"><i data-lucide="equal"></i>Estável</span>`;
+}
+
+function deltaCell(a, b, type){
+  const v = variation(a, b);
+  if (v === null) {
+    const abs = b - a;
+    if (type === 'abs') {
+      const cls = abs > 0 ? 'up' : abs < 0 ? 'down' : 'flat';
+      return `<span class="delta ${cls}">${fmtAbs(abs)}</span>`;
+    }
+    return `<span class="delta flat">—</span>`;
+  }
+  const abs = b - a;
+  if (type === 'abs') {
+    const cls = abs > 0 ? 'up' : abs < 0 ? 'down' : 'flat';
+    return `<span class="delta ${cls}">${fmtAbs(abs)}</span>`;
+  }
+  const cls = v > 0 ? 'up' : v < 0 ? 'down' : 'flat';
+  const icon = v > 0 ? 'arrow-up-right' : v < 0 ? 'arrow-down-right' : 'equal';
+  return `<span class="delta ${cls}"><i data-lucide="${icon}"></i>${fmtPct(v)}</span>`;
+}
+
+function renderTable(key){
+  const rows = DATASETS[key];
+  thItem.textContent = TABLE_TITLES[key];
+
+  tbody.innerHTML = rows.map(r => {
+    const a = r.a, b = r.b;
+    const aTxt = a === 0 ? '—' : fmtInt(a);
+    const bTxt = b === 0 ? '—' : fmtInt(b);
+    return `
+      <tr>
+        <td class="item">${r.item}</td>
+        <td class="num m1">${aTxt}</td>
+        <td class="num m2">${bTxt}</td>
+        <td class="num">${deltaCell(a, b, 'abs')}</td>
+        <td class="num">${deltaCell(a, b, 'pct')}</td>
+        <td class="center">${statusBadge(a, b)}</td>
+      </tr>`;
+  }).join('');
+
+  const notes = {
+    causas:    'Causas raiz mais recorrentes nas NIPs do período. Volume total das Top 5: 127 em Setembro e 139 em Outubro.',
+    objeto:    'Classificação por objeto geral da demanda. EXAME entra como nova categoria em Outubro (35 NIPs); Terapia recua 56,5%.',
+    cidades:   'Goiânia/GO segue concentrando a maior parte das demandas; Anápolis/GO cresce 150% no período.',
+    areas:     'Áreas internas demandadas. CODIN e COGAT atuam em conjunto para uma melhor ação de resposta e resolução eficaz.',
+    subcausas: 'Detalhamento das subcausas. “Prazo de Autorização” salta de 5 → 19 (+280%) — principal vetor de crescimento.'
+  };
+  tableNote.textContent = notes[key] || '';
+
+  if (window.lucide) lucide.createIcons();
+}
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable(btn.dataset.key);
+});
+
+renderTable('causas');
+
+/* ============================================================
+   INSIGHTS QUALITATIVOS
+   ============================================================ */
+const INSIGHTS = [
+  {
+    icon:'clock',
+    tone:'up',
+    title:'Prazo de Autorização — salto de +280%',
+    sub:'5 → 19 demandas · maior crescimento percentual do período',
+    tag:'+280,0%',
+    tagClass:'up',
+    body:`
+      <p>A subcausa <strong>Prazo de Autorização</strong> quase quadruplicou no comparativo, saltando de 5 para 19 registros (+14). É o maior salto percentual de todo o relatório de Outubro.</p>
+      <p>Mesmo com base inicial pequena, o movimento merece atenção: é um dos indicadores mais sensíveis à percepção de qualidade do beneficiário e gatilho clássico de reclamações e insatisfação com o plano.</p>
+      <p><strong>Ação recomendada:</strong> revisão imediata dos SLAs de autorização, com painel semanal por especialidade e revisão de filas represadas nas áreas regulatória e assistencial.</p>
+      <div class="insight-meta">
+        <span class="pill">Subcausa</span>
+        <span class="pill warn">Prioridade alta</span>
+      </div>`
+  },
+  {
+    icon:'activity',
+    tone:'down',
+    title:'Terapia — maior queda do período (−56,5%)',
+    sub:'23 → 10 demandas · retração acentuada no objeto',
+    tag:'−56,5%',
+    tagClass:'down',
+    body:`
+      <p>O objeto <strong>Terapia</strong> recuou de 23 para 10 registros (−13), revertendo o pico de Setembro. É a maior queda absoluta do comparativo.</p>
+      <p>O resultado pode indicar efeito das ações de revisão de critérios de autorização adotadas no mês anterior, ou uma migração das recusas para o objeto <strong>Exame</strong>, que aparece pela primeira vez com 35 registros.</p>
+      <p><strong>Ação recomendada:</strong> confirmar se o recuo é estrutural (melhoria no fluxo) ou apenas conjuntural (férias, sazonalidade). Manter o monitoramento mensal das terapias para evitar ressurgimento no próximo ciclo.</p>
+      <div class="insight-meta">
+        <span class="pill">Objeto Geral</span>
+        <span class="pill">Tendência positiva</span>
+      </div>`
+  },
+  {
+    icon:'file-plus',
+    tone:'up',
+    title:'EXAME — nova categoria com 35 demandas em Outubro',
+    sub:'Objeto entra no radar e já é o mais demandado',
+    tag:'Novo',
+    tagClass:'flat',
+    body:`
+      <p>A categoria <strong>Exame</strong> não existia na série até Setembro e aparece em Outubro com <strong>35 registros</strong> — já o maior volume entre todos os objetos, superando Consulta (24) e Cirurgia (23).</p>
+      <p>É um movimento que muda o mapa de prioridades: exames passam a demandar atenção equivalente a consultas e cirurgias, exigindo revisão da esteira de autorização de procedimentos diagnósticos.</p>
+      <p><strong>Ação recomendada:</strong> mapear quais exames lideram as NIPs e verificar se há padrão (ex.: imagem, laboratório, genética). Se confirmado, criar trilha específica de auditoria técnica e credenciamento para essa categoria.</p>
+      <div class="insight-meta">
+        <span class="pill">Objeto Geral</span>
+        <span class="pill warn">Monitorar</span>
+      </div>`
+  },
+  {
+    icon:'gavel',
+    tone:'up',
+    title:'Regras de Acesso — procedentes quadruplicaram (4 → 16)',
+    sub:'21 → 27 demandas · +28,6% no volume, +300% em procedentes',
+    tag:'+28,6%',
+    tagClass:'up',
+    body:`
+      <p>A causa <strong>Regras para Acesso aos Atendimentos</strong> cresceu 28,6% no volume (21 → 27) e, mais relevante, teve explosão de decisões <strong>procedentes</strong>: de 4 para 16 registros (4x).</p>
+      <p>Isso indica que a maior parte das novas demandas foi acolhida — em Setembro, apenas 19% eram procedentes; em Outubro, <strong>59,3%</strong> o foram. É a principal mudança de perfil decisório do período.</p>
+      <p><strong>Ação recomendada:</strong> investigar a raiz das negativas revertidas — provável falha de orientação na entrada, comunicação insuficiente sobre regras contratuais ou necessidade de revisão dos fluxos de autorização inicial.</p>
+      <div class="insight-meta">
+        <span class="pill">Causa Raiz</span>
+        <span class="pill warn">Prioridade alta</span>
+      </div>`
+  },
+  {
+    icon:'file-text',
+    tone:'up',
+    title:'ROL de Procedimentos — improcedentes sobem 14 → 19',
+    sub:'52 → 54 demandas · +3,8% no total, +35,7% em improcedentes',
+    tag:'+3,8%',
+    tagClass:'up',
+    body:`
+      <p>O <strong>ROL de Procedimentos</strong> segue como a causa mais demandada do relatório, com 54 registros em Outubro. O volume cresce pouco (+3,8%), mas a composição das decisões piora: <strong>improcedentes saltam de 14 para 19</strong> (+35,7%), enquanto procedentes permanecem estáveis em 17.</p>
+      <p>O dado sugere que o aumento da causa está vindo de demandas com menor aderência técnica, o que pressiona a área de autorização sem gerar resultado assistencial efetivo.</p>
+      <p><strong>Ação recomendada:</strong> reforçar a triagem prévia e o uso de segunda opinião técnica, além de capacitar as equipes para orientar o beneficiário quanto ao enquadramento contratual antes da formalização da NIP.</p>
+      <div class="insight-meta">
+        <span class="pill">Causa Raiz</span>
+        <span class="pill">Volume crítico</span>
+      </div>`
+  },
+  {
+    icon:'map-pin',
+    tone:'down',
+    title:'Goiânia/GO — recuo de 6,6%, mas mantém 80%',
+    sub:'91 → 85 demandas · concentração se mantém',
+    tag:'−6,6%',
+    tagClass:'down',
+    body:`
+      <p>A capital recuou de 91 para 85 demandas (−6,6%) — primeiro alívio após o pico de Setembro — mas segue concentrando <strong>mais de 80%</strong> de toda a demanda das cinco cidades monitoradas.</p>
+      <p>Em contrapartida, <strong>Anápolis/GO</strong> mais que dobrou (6 → 15, +150%), indicando interiorização da demanda, enquanto Aparecida de Goiânia/GO (−57,1%) e Brasília/DF (−50%) recuaram forte.</p>
+      <p><strong>Ação recomendada:</strong> avaliar capacidade instalada em Anápolis para absorver o crescimento, e reforçar a equipe de Goiânia mesmo com o leve recuo — a base segue muito elevada.</p>
+      <div class="insight-meta">
+        <span class="pill">Distribuição Geográfica</span>
+        <span class="pill">Interiorização</span>
+      </div>`
+  },
+  {
+    icon:'building-2',
+    tone:'neutral',
+    title:'CODIN/COGAT — Atuação conjunta para resposta eficaz',
+    sub:'51 → 37 demandas · Estratégia de ação combinada',
+    tag:'Ação Conjunta',
+    tagClass:'flat',
+    body:`
+      <p>As áreas <strong>CODIN e COGAT</strong> são acionadas em conjunto para uma melhor ação de resposta e resolução eficaz das demandas. No comparativo, o bloco combinado registrou 51 demandas em Setembro e 37 em Outubro (−27,5%).</p>
+      <p>A atuação sinérgica entre as duas áreas permite uma abordagem mais completa e ágil, unindo esforços operacionais e de gestão para resolver as NIPs com maior celeridade e assertividade.</p>
+      <p>Enquanto isso, <strong>COARA</strong> segue na liderança (76 → 79), <strong>COARR</strong> mais que dobrou (8 → 14, +75%) e <strong>CONEG</strong> cresceu 166,7% (3 → 8).</p>
+      <p><strong>Ação recomendada:</strong> documentar e escalar o modelo de atuação conjunta CODIN/COGAT para outras frentes, visando replicar os ganhos de eficiência obtidos com essa integração.</p>
+      <div class="insight-meta">
+        <span class="pill">Áreas Internas</span>
+        <span class="pill">Eficiência Operacional</span>
+      </div>`
+  },
+  {
+    icon:'split',
+    tone:'neutral',
+    title:'Assistencial concentra 87,39% da demanda anual',
+    sub:'963 NIPs assistenciais vs. 139 não assistenciais',
+    tag:'87,39%',
+    tagClass:'up',
+    body:`
+      <p>A natureza <strong>Assistencial</strong> concentra <strong>87,39% de toda a demanda</strong> acumulada no ano (963 de 1.102 NIPs), enquanto a <strong>Não Assistencial</strong> responde por apenas 12,61% (139 NIPs). O padrão é estável frente aos meses anteriores.</p>
+      <p>Em Outubro, a proporção se mantém: <strong>136 dos 152 NIPs</strong> (89,5%) são assistenciais. A pressão segue concentrada na ponta assistencial, exigindo priorização de auditoria, regulação e credenciamento.</p>
+      <p><strong>Ação recomendada:</strong> manter o foco em auditoria assistencial e revisar a esteira de exames (novo objeto em Outubro), que já é o mais demandado.</p>
+      <div class="insight-meta">
+        <span class="pill">Natureza</span>
+        <span class="pill warn">Concentração crítica</span>
+      </div>`
+  },
+  {
+    icon:'trending-up',
+    tone:'up',
+    title:'Anápolis/GO — salto de +150% na demanda',
+    sub:'6 → 15 demandas · interiorização da pressão',
+    tag:'+150,0%',
+    tagClass:'up',
+    body:`
+      <p>A cidade de <strong>Anápolis/GO</strong> mais que dobrou a demanda no comparativo (6 → 15, +150%), passando a responder por cerca de <strong>14%</strong> das demandas registradas nas cinco cidades monitoradas em Outubro (antes eram apenas 5%).</p>
+      <p>É o principal vetor de interiorização do período, contrastando com a estabilidade de Brasília/DF (8 → 4) e a queda de Aparecida de Goiânia/GO (7 → 3).</p>
+      <p><strong>Ação recomendada:</strong> verificar a capacidade de rede credenciada e o tempo de resposta em Anápolis. Se o crescimento for estrutural, considerar reforço local de auditoria e regulação.</p>
+      <div class="insight-meta">
+        <span class="pill">Distribuição Geográfica</span>
+        <span class="pill">Interiorização</span>
+      </div>`
+  },
+  /* NOVO INSIGHT: OBJETO FINANCEIRO */
+  {
+    icon:'wallet',
+    tone:'up',
+    title:'Objeto Financeiro — 12 frentes de atrito com o beneficiário',
+    sub:'10 → 12 demandas · +20,0% no volume total',
+    tag:'+20,0%',
+    tagClass:'up',
+    body:`
+      <p>O objeto <strong>Financeiro</strong> registrou um leve crescimento no comparativo (10 → 12 NIPs), mas o dado mais relevante é a diversidade de motivos que o compõem. O escopo de reclamações financeiras abrange <strong>12 temas distintos</strong>, que revelam falhas de comunicação, problemas sistêmicos e erros operacionais na esteira de faturamento.</p>
+      
+      <p><strong>Diagnóstico por eixos de atrito:</strong></p>
+      <ul style="margin-left: 16px; margin-bottom: 12px; color: var(--ink-soft); line-height: 1.6;">
+        <li><strong>Erros de Cobrança & Duplicidade:</strong> Cobranças indevidas de mensalidade e coparticipação, duplicidade de boletos e lançamentos equivocados em folha de pagamento. Esses erros geram desgaste imediato e elevado risco de judicialização.</li>
+        <li><strong>Falhas Sistêmicas & Autoatendimento:</strong> Indisponibilidade de boleto, alteração de vencimento sem solicitação e a dificuldade de emitir comprovantes de coparticipação pelo site ou app. Isso demonstra uma barreira de usabilidade na plataforma do beneficiário.</li>
+        <li><strong>Reembolsos & Parcelamentos:</strong> Solicitações de reembolso de processos SEI deferidos e de terapias especiais, além de pedidos de parcelamento de boleto. Esses casos indicam a necessidade de uma trilha mais ágil e transparente para ressarcimentos.</li>
+      </ul>
+
+      <p><strong>Ação recomendada:</strong> recomenda-se uma força-tarefa com a área de TI e Faturamento para: (1) sanar os erros de duplicidade e cobrança em folha; (2) estabilizar a emissão de boletos e comprovantes no app; e (3) criar uma central de resolução rápida (fast-track) para reembolsos e parcelamentos, desafogando a esteira de NIPs.</p>
+      
+      <div style="background: rgba(255,255,255,0.6); border: 1px dashed var(--mint-mid); border-radius: 8px; padding: 12px; margin: 16px 0;">
+        <span style="display:block; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--forest); margin-bottom: 6px;">Temas Mapeados (Escopo da Análise)</span>
+        <div class="finance-tags">
+          <span class="finance-tag">Cobranças de mensalidades pagas</span>
+          <span class="finance-tag">Alteração de vencimento sem solicitação</span>
+          <span class="finance-tag">Indisponibilidade de boleto</span>
+          <span class="finance-tag info">Solicitação de comprovantes (copart.)</span>
+          <span class="finance-tag info">Solicitação de comprovantes (mens./copart.)</span>
+          <span class="finance-tag warn">Solicitação de parcelamento de boleto</span>
+          <span class="finance-tag warn">Reembolso referente ao Processo SEI</span>
+          <span class="finance-tag">Cobrança de coparticipações indevida</span>
+          <span class="finance-tag">Cobrança indevida de mensalidade</span>
+          <span class="finance-tag warn">Reembolso referente a terapias especiais</span>
+          <span class="finance-tag">Cobrança em duplicidade</span>
+          <span class="finance-tag">Cobrança em folha de forma indevida</span>
+        </div>
+      </div>
+
+      <div class="insight-meta">
+        <span class="pill">Objeto Geral</span>
+        <span class="pill warn">Atenção à Jornada</span>
+      </div>`
+  }
+];
+
+const insightsWrap = document.getElementById('insights');
+
+insightsWrap.innerHTML = INSIGHTS.map(ins => `
+  <article class="insight">
+    <button class="insight-head" type="button" aria-expanded="false">
+      <span class="insight-icon ${ins.tone}">
+        <i data-lucide="${ins.icon}"></i>
+      </span>
+      <span class="insight-titles">
+        <span class="insight-title">${ins.title}</span>
+        <span class="insight-sub">${ins.sub}</span>
+      </span>
+      <span class="insight-tag ${ins.tagClass}">${ins.tag}</span>
+      <i data-lucide="chevron-down" class="chev"></i>
+    </button>
+    <div class="insight-body">
+      <div>
+        <div class="insight-content">${ins.body}</div>
+      </div>
+    </div>
+  </article>
+`).join('');
+
+insightsWrap.addEventListener('click', e => {
+  const head = e.target.closest('.insight-head');
+  if (!head) return;
+  const card = head.closest('.insight');
+  const isOpen = card.classList.toggle('open');
+  head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+});
+
+const firstInsight = insightsWrap.querySelector('.insight');
+if (firstInsight) {
+  firstInsight.classList.add('open');
+  firstInsight.querySelector('.insight-head').setAttribute('aria-expanded','true');
+}
+
+/* ============================================================
+   ÍCONES
+   ============================================================ */
+if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>
